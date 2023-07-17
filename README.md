@@ -42,7 +42,7 @@ amount - The amount on the transaction
 payee - The payee or description on the transaction
 NOTE: The date is not passed into the constructor. The constructor should set the date to be the current date automatically.
 
-Push Yourself Further (no thanks)
+Push Yourself Further:
 SavingsAccount class - This class should extend the BankAccount class.
 
 1.  The class should have an additional field:

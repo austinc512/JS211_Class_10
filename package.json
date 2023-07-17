@@ -1,0 +1,9 @@
+{
+  "name": "bank_account_project",
+  "scripts": {
+    "test": "mocha --no-timeouts"
+  },
+  "dependencies": {
+    "mocha": "10.2.0"
+  }
+}

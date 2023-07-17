@@ -5,101 +5,76 @@ class BankAccount {
     this.transactions = [];
   }
   balance() {
-    // will need to access values here instead.
-
     let currentBalance = 0;
     for (let item of this.transactions) {
       currentBalance += item.amount;
     }
-    // const currentBalance1 = this.transactions.reduce(
-    //   (acc, curr) => acc + curr,
-    //   0
-    // );
     return currentBalance;
   }
   deposit(amt) {
-    // use transaction class
-    let newDeposit = new Transaction("Deposit", amt);
+    let newDeposit = new Transaction(amt, "Deposit");
     if (amt >= 0) {
       this.transactions.push(newDeposit);
     } else {
-      console.log(`You can't do that, sorry.`);
+      console.log(`Don't even try it, pal.`);
     }
   }
   charge(payee, amt) {
-    // payee is the person I'm paying, right?
-    // can't make payment if there's not enough money
-    // I'll have to call balance() to get current balance first
-
     const currentBalance = this.balance();
-    // console.log(currentBalance);
     if (currentBalance >= amt) {
-      let newCharge = new Transaction(payee, amt * -1);
+      let newCharge = new Transaction(amt * -1, payee);
       this.transactions.push(newCharge);
-      // payee.deposit(amt);
     } else {
-      console.log(`You can't do that, sorry!!!`);
+      console.log(`You're too poor for this.`);
     }
   }
 }
 
 class Transaction {
-  constructor(payee, amount) {
-    //
+  constructor(amount, payee) {
     this.payee = payee;
     this.amount = amount;
     this.date = new Date();
   }
 }
 
-const Austin = new BankAccount(109876, "Austin Covey");
-Austin.deposit(1500);
-console.log(Austin.transactions);
-Austin.charge("Punkass Dave", 1000);
-console.log(Austin.transactions);
-console.log(Austin.balance());
-// const Dave = new BankAccount(100001, "Dave Ramsey");
-
-// const moniez1 = new Transaction();
-
-/* ----------Transaction class troubleshooting----------
-
-
-
-----------END----------
-*/
-/* ----------BankAccount class troubleshooting----------
-const Austin = new BankAccount(109876, "Austin Covey");
-console.log(Austin);
-
-console.log(Austin.balance());
-
-// let's test the methods.
-// I have a 'me' object.
-
-// make a deposit()
-Austin.deposit(1500);
-
-// check my balance()
-console.log(`balance after deposit:`, Austin.balance());
-
-// I need a fake recipient, because I don't want to instantiate a class
-// ain't nobody got time for that
-
-const fakePerson = {
-  name: "fake",
-  deposit: function (amt) {
-    console.log(`this is the deposited amount:`, amt);
-  },
-};
-
-// charge()
-
-Austin.charge(fakePerson, 1500);
-
-// balance()
-console.log(`balance after charge:`, Austin.balance());
-----------END----------
-*/
-
-console.log(Date());
+const assert = require("assert");
+if (typeof describe === "function") {
+  // test 1
+  describe("Create an account", () => {
+    it("should be able to create an account", () => {
+      const Dave = new BankAccount(1234567, "Dave Doe");
+      assert.equal(Dave.owner, "Dave Doe");
+      assert.equal(Dave.accountNumber, 1234567);
+    });
+  });
+  // test 2
+  describe("Transaction class", () => {
+    it("should be able to create an instance of the transaction class", () => {
+      const Charge1 = new Transaction(15.45, "Jimmy John's");
+      assert.equal(Charge1.payee, "Jimmy John's");
+      assert.equal(Charge1.amount, 15.45);
+    });
+  });
+  // test 3
+  describe("Account methods", () => {
+    it("deposit should change balance", () => {
+      const Dave = new BankAccount(1234567, "Dave Doe");
+      Dave.deposit(1500);
+      assert.equal(Dave.balance(), 1500);
+    });
+    // test 4
+    it("deposit should create a transaction", () => {
+      const Dave = new BankAccount(1234567, "Dave Doe");
+      Dave.deposit(1500);
+      assert.equal(Dave.transactions.length, 1);
+    });
+    // test 5
+    it("charge should create a transaction", () => {
+      const Dave = new BankAccount(1234567, "Dave Doe");
+      Dave.deposit(1500);
+      Dave.charge("Test Charge", 1400);
+      assert.equal(Dave.transactions.length, 2);
+    });
+  });
+}
